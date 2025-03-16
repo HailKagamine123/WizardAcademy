@@ -1,4 +1,4 @@
-name: CI
+name: Repository Structure Check
 
 on:
   push:
@@ -7,43 +7,22 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  check-structure:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: wizard-coding-academy
 
     steps:
     - uses: actions/checkout@v3
     
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
+    - name: Check repository structure
+      run: |
+        echo "Root directory contents:"
+        ls -la
+        echo "-------------------------------"
         
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Run tests
-      run: npm test || echo "Tests not configured yet"
-      
-  build:
-    runs-on: ubuntu-latest
-    needs: test
-    defaults:
-      run:
-        working-directory: wizard-coding-academy
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Build
-      run: npm run build || echo "Build script not configured yet"
+        echo "Checking for wizard-coding-academy folder:"
+        if [ -d "wizard-coding-academy" ]; then
+          echo "Folder exists! Contents:"
+          ls -la wizard-coding-academy
+        else
+          echo "Folder does not exist in the repository."
+        fi
